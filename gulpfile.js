@@ -1,7 +1,9 @@
 'use strict';
 
 var gulp  = require('gulp');
-var gutil = require('gulp-util');;
+var gutil = require('gulp-util');
+
+var exec = require('child_process').exec;
 
 var ncu              = require('npm-check-updates');
 var WebpackDevServer = require("webpack-dev-server");
@@ -20,6 +22,17 @@ gulp.task('ncu', function(done) {
   }).then(function(upgraded) {
     gutil.log('dependencies to upgrade:', upgraded);
     done();
+  });
+});
+
+/**
+ * hapi 실행
+ */
+gulp.task("hapi", function(callback) {
+  exec('node server.js', function (err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    callback(err);
   });
 });
 
@@ -68,4 +81,5 @@ gulp.task("webpack-dev-server", function(callback) {
  */
 gulp.task("dev", ['ncu'], function(callback){
   gulp.start("webpack-dev-server");
+  gulp.start("hapi");
 });

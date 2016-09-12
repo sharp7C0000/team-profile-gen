@@ -1,33 +1,27 @@
-var babelLoader           = require('babel-loader');
-var babelTransformRuntime = require('babel-plugin-transform-runtime');
+const babelLoader           = require('babel-loader');
+const babelTransformRuntime = require('babel-plugin-transform-runtime');
 
-var path        = require("path");
-var glob        = require('glob');
-var webpack     = require('webpack');
+const path        = require("path");
+const glob        = require('glob');
+const webpack     = require('webpack');
 
-var ENTRY_PATTERN = "./scripts/**/*.entry.js";
-var VENDOR_CHUNK  = "vendor";
-var VENDORS = [
-  "vue",
-  "vue/dist/vue.js",
-  "vue-router",
-  "vuex/dist/vuex.js",
-  "vuex",
-  "jquery",
-  "tether",
-  "bootstrap/dist/js/bootstrap.js"
-]
+const ENTRY_PATTERN = "./assets/scripts/**/entry.jsx";
+const VENDOR_CHUNK  = "vendor";
+const VENDORS = [
+  "react",
+  "react-dom"
+];
 
 var webpackEntry = {};
 
 // common bundles
-glob.sync(ENTRY_PATTERN).forEach(function(file){
-  var entryName  = path.basename(file).replace(".entry.js", "");
+glob.sync(ENTRY_PATTERN).forEach((file) => {
+  var entryName = path.dirname(file).match(/([^\/]+\/)*([^\/]+)/).pop();
   webpackEntry[entryName] = file;
 });
 
 // vendor
-webpackEntry[VENDOR_CHUNK] = VENDORS
+webpackEntry[VENDOR_CHUNK] = VENDORS;
 
 module.exports = {
   entry: webpackEntry,
@@ -36,31 +30,28 @@ module.exports = {
     filename: "[name].bundle.js"
   },
   babel: {
-    presets: ['es2015'],
+    presets: ['es2015', 'react'],
     plugins: ['transform-runtime']
   },
   module: {
     loaders: [
-      // vue loader
-      {
-        test: /\.vue$/, 
-        loader: 'vue'
-      },
       // babel loader
       {
-        test: /\.js$/,
+        test: /\.jsx$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'babel',
         query: {
-          presets: ['es2015'],
+          presets: ['es2015', 'react'],
           plugins: ['transform-runtime']
         }
       },
+      
       // sass loader
       {
         test: /\.scss$/,
         loaders: ["style", "css", "sass"]
       },
+
       // css loader
       { 
         test: /\.css$/, 
@@ -74,12 +65,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin(VENDOR_CHUNK, VENDOR_CHUNK + ".js"),
-    new webpack.ProvidePlugin({
-      '$'            : 'jquery',
-      'jQuery'       : 'jquery',
-      'window.jQuery': 'jquery',
-      'window.Tether': 'tether'
-    })
+    new webpack.optimize.CommonsChunkPlugin(VENDOR_CHUNK, VENDOR_CHUNK + ".js")
   ]
 };
