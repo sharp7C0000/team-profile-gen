@@ -1,9 +1,15 @@
 import React      from 'react';
 import ReactDOM   from 'react-dom';
 
-import Hello from './components/hello.jsx';
+import Topbar from './components/topbar.jsx';
+import Hello  from './components/hello.jsx';
+
+require("../../scss/application.scss");
 
 ReactDOM.render(
-  <Hello phrase="Mother Fucker"/>,
+  <div>
+    <Topbar></Topbar>
+    <Hello phrase="Mother Fucker"/>
+  </div>,
   document.querySelector('#app')
 );
