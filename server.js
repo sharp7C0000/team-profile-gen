@@ -8,6 +8,13 @@ const Path   = require('path');
 const server = new Hapi.Server();
 server.connection({ host: Config.host, port: Config.port });
 
+/** Install static serve **/
+server.register(require('inert'), (err) => {
+  if (err) {
+    throw err;
+  }
+});
+
 /** Install template engine **/
 server.register(require('vision'), (err) => {
   
@@ -15,25 +22,39 @@ server.register(require('vision'), (err) => {
     throw err;
   }
 
+  const globalViewContext = {
+    title: 'Team Profile Generator'
+  };
+
   server.views({
     engines   : { ejs: require('ejs') },
     relativeTo: __dirname,
-    path      : 'views'
+    path      : 'views',
+    context   : globalViewContext
   });
 });
 
 /** routes **/
 
-// GET : index
-// desc - randering index page
+// GET : server public files
+server.route({
+  method: 'GET',
+  path: '/assets/{param*}',
+  handler: {
+    directory: {
+      path: 'public'
+    }
+  }
+});
+
+// GET : randering index page
 server.route({
   method: 'GET',
   path  : '/',
   handler (request, reply) {
-    reply.view('index', { title: 'My home page' });
+    reply.view('index');
   }
 });
-
 
 ///////////////////////////////////////////////////////
 ////////////// some wall ~~~ //////////////////////////
