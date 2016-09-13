@@ -11,7 +11,7 @@ class Hero extends React.Component {
 
   redirectToProfilePage (e) {
     if(!this.props.pageId.error && this.props.pageId.dirty) {
-      window.location = "page/" + this.props.pageId.value;
+      window.location = "view/" + this.props.pageId.value;
     }
   }
 
@@ -43,7 +43,7 @@ class Hero extends React.Component {
 
         <div className="columns first">
           <div className="column is-12">
-            <a href="/page/" className="button is-primary is-large">Generate</a>
+            <a href="/new/" className="button is-primary is-large">Generate</a>
           </div>
         </div>
 

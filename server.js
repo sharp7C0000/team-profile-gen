@@ -47,7 +47,7 @@ server.route({
   }
 });
 
-// GET : randering index page
+// GET : rendering index page
 server.route({
   method: 'GET',
   path  : '/',
@@ -55,6 +55,25 @@ server.route({
     reply.view('index');
   }
 });
+
+// GET : rendering new page
+server.route({
+  method: 'GET',
+  path  : '/new/',
+  handler (request, reply) {
+    reply.view('new');
+  }
+});
+
+// GET : rendering view page
+server.route({
+  method: 'GET',
+  path  : '/view/{pageId}',
+  handler (request, reply) {
+    reply.view('view', {pageId: request.params.pageId});
+  }
+});
+
 
 ///////////////////////////////////////////////////////
 ////////////// some wall ~~~ //////////////////////////
