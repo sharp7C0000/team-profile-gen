@@ -9,7 +9,8 @@ const ENTRY_PATTERN = "./assets/scripts/**/entry.jsx";
 const VENDOR_CHUNK  = "vendor";
 const VENDORS = [
   "react",
-  "react-dom"
+  "react-dom",
+  "redux"
 ];
 
 var webpackEntry = {};
@@ -42,6 +43,17 @@ module.exports = {
         loader: 'babel',
         query: {
           presets: ['es2015', 'react'],
+          plugins: ['transform-runtime']
+        }
+      },
+
+      // babel loader
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        loader: 'babel',
+        query: {
+          presets: ['es2015'],
           plugins: ['transform-runtime']
         }
       },

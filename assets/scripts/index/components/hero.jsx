@@ -1,9 +1,25 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 
 require("../../../scss/index/hero.scss");
 
 class Hero extends React.Component {
+
+  redirectToProfilePage (e) {
+    const node = ReactDOM.findDOMNode(this.refs.pageIdInput);
+    const text = node.value.trim();
+    alert(text);
+  }
+
+  checkValidPageId (e) {
+    console.log("hi", e);
+  }
+
   render() {
+
+    const { dispatch, pageId } = this.props;
+
     return <div className="comp-hero">
 
       <div className="wrapper">
@@ -34,8 +50,10 @@ class Hero extends React.Component {
         <div className="columns">
           <div className="column is-12">
             <p className="control has-addons has-addons-centered">
-              <input className="input is-medium " type="text" placeholder="Page ID"></input>
-              <a className="button is-info is-medium">Go</a>
+              <input onKeyPress={(e) => this.checkValidPageId(e)} 
+                className="input is-medium " ref='pageIdInput' type="text" placeholder="Page ID">
+              </input>
+              <a className="button is-info is-medium is-disabled" onClick={(e) => this.redirectToProfilePage(e)}>Go</a>
             </p>
           </div>
         </div>
@@ -49,4 +67,10 @@ class Hero extends React.Component {
   }
 }
 
-export default Hero;
+function select(state) {
+  return {
+    pageId: state.pageId
+  };
+}
+
+export default connect(select)(Hero);

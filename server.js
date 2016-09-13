@@ -23,7 +23,7 @@ server.register(require('vision'), (err) => {
   }
 
   const globalViewContext = {
-    title: 'Team Profile Generator'
+    title: 'Team Profile Page Generator'
   };
 
   server.views({
