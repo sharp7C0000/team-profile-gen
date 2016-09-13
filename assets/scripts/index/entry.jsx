@@ -9,7 +9,6 @@ require("../../scss/application.scss");
 ReactDOM.render(
   <div>
     <Topbar></Topbar>
-    <Hello phrase="Mother Fucker"/>
   </div>,
   document.querySelector('#app')
 );
