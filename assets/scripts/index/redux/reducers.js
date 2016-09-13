@@ -1,10 +1,34 @@
 import { combineReducers } from 'redux';
 import { TYPING_PAGE_ID }  from './actions';
 
-function pageId(state = null, action) {
+function pageId(state = { dirty: false }, action) {
+
+  const defaultReturnState = {
+    value: action.value
+  }
+
   switch (action.type) {
     case TYPING_PAGE_ID:
-      return action.value;
+
+      switch (action.value.length) {
+        case 0:
+          return Object.assign({}, defaultReturnState, {
+            error: null,
+            dirty: false
+          });
+        case 7:
+          return Object.assign({}, defaultReturnState, {
+            error: null,
+            dirty: true
+          });
+        
+        default:
+          return Object.assign({}, defaultReturnState, {
+            error: "Invalid Page ID",
+            dirty: true
+          });
+      }
+      
     default:
       return state;
   }

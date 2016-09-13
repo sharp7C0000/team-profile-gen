@@ -2,23 +2,31 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
+import { typingPageID } from '../redux/actions';
+
 require("../../../scss/index/hero.scss");
+
 
 class Hero extends React.Component {
 
   redirectToProfilePage (e) {
-    const node = ReactDOM.findDOMNode(this.refs.pageIdInput);
-    const text = node.value.trim();
-    alert(text);
+    if(!this.props.pageId.error && this.props.pageId.dirty) {
+      window.location = "page/" + this.props.pageId.value;
+    }
   }
 
-  checkValidPageId (e) {
-    console.log("hi", e);
+  typingPageID (e) {
+    if(e.key == "Enter") {
+      this.redirectToProfilePage(e);
+    } else {
+      const { dispatch } = this.props;
+      const node = ReactDOM.findDOMNode(this.refs.pageIdInput);
+      const text = node.value.trim();
+      dispatch(typingPageID(text));
+    }
   }
 
   render() {
-
-    const { dispatch, pageId } = this.props;
 
     return <div className="comp-hero">
 
@@ -35,7 +43,7 @@ class Hero extends React.Component {
 
         <div className="columns first">
           <div className="column is-12">
-            <a href="#" className="button is-primary is-large">Generate</a>
+            <a href="/page/" className="button is-primary is-large">Generate</a>
           </div>
         </div>
 
@@ -50,11 +58,20 @@ class Hero extends React.Component {
         <div className="columns">
           <div className="column is-12">
             <p className="control has-addons has-addons-centered">
-              <input onKeyPress={(e) => this.checkValidPageId(e)} 
-                className="input is-medium " ref='pageIdInput' type="text" placeholder="Page ID">
+              <input onKeyUp={(e) => this.typingPageID(e)}
+                className={"input is-medium " + (this.props.pageId.error ? 'is-danger' : '')} ref='pageIdInput' type="text" placeholder="Page ID (ex: ab1d2fg)">
               </input>
-              <a className="button is-info is-medium is-disabled" onClick={(e) => this.redirectToProfilePage(e)}>Go</a>
+              <a className={"button is-info is-medium " + (this.props.pageId.error || !this.props.pageId.dirty ? 'is-disabled' : '')} onClick={(e) => this.redirectToProfilePage(e)}>Go</a>
             </p>
+
+            {(() => {
+              if(this.props.pageId.error) {
+                return <span className="help is-danger">
+                  <i className="fa fa-warning"></i> {this.props.pageId.error}
+                </span>
+              }
+            })()}
+
           </div>
         </div>
 
