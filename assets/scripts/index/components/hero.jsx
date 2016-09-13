@@ -6,12 +6,14 @@ import { typingPageID } from '../redux/actions';
 
 require("../../../scss/index/hero.scss");
 
+const VIEW_URL = (pageId) => { return "view/" + pageId };
+const NEW_URL  = (pageId) => { return "new/" };
 
 class Hero extends React.Component {
 
   redirectToProfilePage (e) {
     if(!this.props.pageId.error && this.props.pageId.dirty) {
-      window.location = "view/" + this.props.pageId.value;
+      window.location = VIEW_URL(this.props.pageId.value);
     }
   }
 
@@ -43,7 +45,7 @@ class Hero extends React.Component {
 
         <div className="columns first">
           <div className="column is-12">
-            <a href="/new/" className="button is-primary is-large">Generate</a>
+            <a href={NEW_URL()} className="button is-primary is-large">Generate</a>
           </div>
         </div>
 
