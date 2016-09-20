@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
-require("../../../scss/new/nav.scss");
+require("../../../scss/new/top_nav.scss");
 
-class Nav extends React.Component {
+class TopNav extends React.Component {
 
   render() {
-    return  <div className="comp-nav">
+    return  <div className="comp-top-nav">
 
       <div className="hero is-primary is-medium">
         <div className="hero-head">
@@ -48,4 +48,4 @@ class Nav extends React.Component {
 }
 
 
-export default (Nav);
+export default (TopNav);
