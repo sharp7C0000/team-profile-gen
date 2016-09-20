@@ -14,10 +14,38 @@ class Member extends React.Component {
 
       <div className="media-content">
         <div className="content">
-          <div className="title is-4">{this.props.name}</div>
-          <div className="subtitle is-5">{this.props.position}</div>
-          <p>
-            {this.props.desc}
+          <div className={"title is-4 " + (this.props.name ? "" : "placeholder")}>
+            {
+              (() => {
+                if(this.props.name) {
+                  return this.props.name
+                } else {
+                  return "Name"
+                }
+              })()
+            }
+          </div>
+          <div className={"subtitle is-5 " + (this.props.position ? "" : "placeholder")}>
+            {
+              (() => {
+                if(this.props.position) {
+                  return this.props.position
+                } else {
+                  return "Position"
+                }
+              })()
+            }
+          </div>
+          <p className={(this.props.desc ? "" : "placeholder")}>
+            {
+              (() => {
+                if(this.props.desc) {
+                  return this.props.desc
+                } else {
+                  return "Description"
+                }
+              })()
+            }
           </p>
         </div>
       </div>

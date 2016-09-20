@@ -6,7 +6,7 @@
 */
 
 import { combineReducers } from 'redux';
-import { UPDATE_TITLE }  from './actions';
+import { UPDATE_TITLE, ADD_MEMBER }  from './actions';
 
 function title(state = null, action) {
   switch (action.type) {
@@ -17,8 +17,22 @@ function title(state = null, action) {
   }
 }
 
+function members(state = [], action) {
+  switch (action.type) {
+    case ADD_MEMBER:
+      return [...state, {
+        name     : null,
+        position : null,
+        desc     : null
+      }];
+    default:
+      return state;
+  }
+}
+
 const newApp = combineReducers({
-  title
+  title,
+  members
 });
 
 export default newApp;

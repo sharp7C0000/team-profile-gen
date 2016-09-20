@@ -2,7 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
+import { addMember } from '../../redux/actions';
+
 class ControlPane extends React.Component {
+
+  add (e) {
+    e.preventDefault();
+    const { dispatch } = this.props;
+    dispatch(addMember());
+  }
 
   render() {
     return  <div className="comp-control-pane">
@@ -13,7 +21,7 @@ class ControlPane extends React.Component {
           Control panel
         </p>
 
-        <a className="panel-block" href="#">
+        <a className="panel-block" href="#" onClick={(e) => this.add(e)}>
           <span className="panel-icon">
             <i className="fa fa-plus"></i>
           </span>
@@ -48,13 +56,14 @@ class ControlPane extends React.Component {
           </div>
         </div>
 
-        <div className="panel-block">
+        {/*<div className="panel-block">
           <ul className="menu-list">
             <li>Team</li>
             <li>Age</li>
             <li>Height</li>
           </ul>
         </div>
+       */}
 
         <div className="panel-block">
           <button className="button is-primary is-fullwidth">
@@ -73,4 +82,9 @@ class ControlPane extends React.Component {
   }
 }
 
-export default (ControlPane);
+function select(state) {
+  return {
+  };
+}
+
+export default connect(select)(ControlPane);
