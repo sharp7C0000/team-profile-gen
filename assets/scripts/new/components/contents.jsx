@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
 import ControlPane from './contents/control_pane.jsx';
-import Member      from './contents/member.jsx';
+import Preview     from './contents/preview.jsx';
 
 require("../../../scss/new/contents.scss");
 
@@ -27,58 +27,10 @@ class Contents extends React.Component {
           {/* Preview */}
           <div className="tile is-parent">
             <div className="tile is-child box">
-              <div className="level">
-
-                <div className="level-left">
-                  <div className="level-item">
-                    <p className="title">a</p>
-                  </div>
-                </div>
-
-                <div className="level-right">
-                  <div className="level-item">
-                    <button className="button is-small is-success is-outlined">
-                      <span className="icon is-small">
-                        <i className="fa fa-pencil"></i>
-                      </span>
-                      <span>edit</span>
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-
-              <Member 
-                name="hh"
-                position="Assistant Manager"
-                desc="Have a nice day all of you (Heart)"
-              ></Member>
-
-              <Member 
-                name="dd"
-                position="Deputy Team Manager"
-                desc="..."
-              ></Member>
-
-              <Member 
-                name="tt"
-                position="Team manager"
-                desc="Maybe i can help you :)"
-              ></Member>
-
+              <Preview></Preview>
+            </div>
           </div>
         </div>
-      </div>
-
-
-
-
-
-
-      {/* controles sidebar */}
-
-
-      {/* preview */}
 
       </div>
 
