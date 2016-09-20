@@ -2,20 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
+import { updateTitle } from '../../redux/actions';
+
 class Title extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      isEditing: false,
-      value    : null,
-      tempValue: null
+      isEditing: false
     };
-  }
-
-  changeTempValue (e) {
-    this.setState({tempValue: e.target.value});
   }
 
   enterEdit() {
@@ -25,7 +21,10 @@ class Title extends React.Component {
   exitEdit(applyEdit = false) {
     this.setState({isEditing: false});
     if(applyEdit) {
-      this.setState({value: this.state.tempValue});
+      const { dispatch } = this.props;
+      const node = ReactDOM.findDOMNode(this.refs.titleInput);
+      const text = node.value.trim();
+      dispatch(updateTitle(text));
     }
   }
 
@@ -37,17 +36,16 @@ class Title extends React.Component {
           {(() => {
             if(this.state.isEditing) {
               return <p className="control is-expanded">
-                <input className="input is-large" type="text" 
-                  onChange={this.changeTempValue.bind(this)} 
-                  defaultValue={this.state.value} 
+                <input className="input is-large" type="text" ref='titleInput'
+                  defaultValue={this.props.value} 
                   placeholder="Team Name"
                 />
               </p>
             } else {
-              return <p className={"title is-3 " + (!this.state.value ? 'placeholder' : '')} style={{height:"48px", lineHeight: "48px"}}>
+              return <p className={"title is-3 " + (!this.props.value ? 'placeholder' : '')} style={{height:"48px", lineHeight: "48px"}}>
                 {(() => {
-                  if(this.state.value) {
-                    return this.state.value
+                  if(this.props.value) {
+                    return this.props.value
                   } else {
                     return "Team Name"
                   }
@@ -71,7 +69,7 @@ class Title extends React.Component {
                   </span>
                   <span>ok</span>
                 </button>&nbsp;
-                <button type="button" onClick={this.exitEdit.bind(this)} className="button is-small is-danger is-outlined">
+                <button type="button" onClick={this.exitEdit.bind(this, false)} className="button is-small is-danger is-outlined">
                   <span className="icon is-small">
                     <i className="fa fa-times"></i>
                   </span>
@@ -91,9 +89,15 @@ class Title extends React.Component {
         </div>
       </div>
     </div>
+    
   }
 }
 
-export default (Title);
+function select(state) {
+  return {
+    value: state.title
+  };
+}
 
+export default connect(select)(Title);
               
