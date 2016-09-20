@@ -36,7 +36,7 @@ class Title extends React.Component {
 
           {(() => {
             if(this.state.isEditing) {
-              return <p className="control">
+              return <p className="control is-expanded">
                 <input className="input is-large" type="text" 
                   onChange={this.changeTempValue.bind(this)} 
                   defaultValue={this.state.value} 
@@ -44,7 +44,7 @@ class Title extends React.Component {
                 />
               </p>
             } else {
-              return <p className={"title is-3 " + (!this.state.value ? 'placeholder' : '')}>
+              return <p className={"title is-3 " + (!this.state.value ? 'placeholder' : '')} style={{height:"48px", lineHeight: "48px"}}>
                 {(() => {
                   if(this.state.value) {
                     return this.state.value
