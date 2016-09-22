@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
-import { addMember } from '../../redux/actions';
+import { addMember, savePage } from '../../redux/actions';
 
 class ControlPane extends React.Component {
 
@@ -10,6 +10,12 @@ class ControlPane extends React.Component {
     e.preventDefault();
     const { dispatch } = this.props;
     dispatch(addMember());
+  }
+
+  save (e) {
+    e.preventDefault();
+    const { dispatch } = this.props;
+    dispatch(savePage(this.props.serialized));
   }
 
   render() {
@@ -66,7 +72,7 @@ class ControlPane extends React.Component {
        */}
 
         <div className="panel-block">
-          <button className="button is-primary is-fullwidth">
+          <button onClick={(e) => this.save(e)} className="button is-primary is-fullwidth">
             <span className="icon is-small">
               <i className="fa fa-floppy-o"></i>
             </span>
@@ -83,7 +89,33 @@ class ControlPane extends React.Component {
 }
 
 function select(state) {
+
+  function toBlob(dataURL) {
+    if(dataURL) {
+      var arr = dataURL.split(','), mime = arr[0].match(/:(.*?);/)[1],
+          bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+      while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], {type:mime});
+    }
+  }
+
+  const fd = new FormData();
+
+  fd.append("title", state.page.title);
+
+  state.page.members.forEach((member, index) => {
+    fd.append(`name[${index}]`, member.name);
+    fd.append(`position[${index}]`, member.position);
+    fd.append(`desc[${index}]`, member.desc);
+    if(member.image) {
+      fd.append(`image[${index}]`, toBlob(member.image), "ifile");
+    }
+  });
+
   return {
+    serialized: fd
   };
 }
 

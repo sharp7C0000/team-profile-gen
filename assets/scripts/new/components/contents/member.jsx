@@ -69,7 +69,7 @@ class Member extends React.Component {
       const descNode     = ReactDOM.findDOMNode(this.refs.descInput);
       const desc         = descNode.value;
 
-      const image = this.refs.imageView.src;
+      const image = this.refs.imageView.src == ImagePlaceholderUrl ? null : this.refs.imageView.src;
 
       this.props.onApplyEdit({image, name, position, desc});
     }

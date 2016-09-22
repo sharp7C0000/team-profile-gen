@@ -1,12 +1,5 @@
-/*
-{
-  title  : null, // title of page
-  members: []    // member list
-}
-*/
-
 import { combineReducers } from 'redux';
-import { UPDATE_TITLE, ADD_MEMBER, UPDATE_MEMBER, REMOVE_MEMBER }  from './actions';
+import { UPDATE_TITLE, ADD_MEMBER, UPDATE_MEMBER, REMOVE_MEMBER, SAVE_PAGE }  from './actions';
 
 function title(state = null, action) {
   switch (action.type) {
@@ -41,9 +34,29 @@ function members(state = [], action) {
   }
 }
 
+
+function page(state = {}, action) {
+
+  switch (action.type) {
+    
+    case SAVE_PAGE:
+      console.log(state);
+      return {
+        title : title(state.title, action),
+        members: members(state.members, action)
+      };
+    
+    default:
+      return {
+        title : title(state.title, action),
+        members: members(state.members, action)
+      };
+  }
+}
+
+
 const newApp = combineReducers({
-  title,
-  members
+  page
 });
 
 export default newApp;

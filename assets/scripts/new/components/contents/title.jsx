@@ -2,8 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
-import { updateTitle } from '../../redux/actions';
-
 class Title extends React.Component {
 
   constructor(props) {
@@ -24,7 +22,7 @@ class Title extends React.Component {
       const { dispatch } = this.props;
       const node = ReactDOM.findDOMNode(this.refs.titleInput);
       const text = node.value.trim();
-      dispatch(updateTitle(text));
+      this.props.onApplyEdit(text);
     }
   }
 
@@ -93,11 +91,5 @@ class Title extends React.Component {
   }
 }
 
-function select(state) {
-  return {
-    value: state.title
-  };
-}
-
-export default connect(select)(Title);
+export default Title;
               

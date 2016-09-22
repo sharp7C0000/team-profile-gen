@@ -5,9 +5,14 @@ import { connect } from 'react-redux';
 import Title  from './title.jsx';
 import Member from './member.jsx';
 
-import { removeMember, updateMember } from '../../redux/actions';
+import { removeMember, updateMember, updateTitle } from '../../redux/actions';
 
 class Preview extends React.Component {
+
+  updateTitle (value) {
+    const { dispatch } = this.props;
+    dispatch(updateTitle(value));
+  }
 
   removeMem (index) {
     const { dispatch } = this.props;
@@ -22,7 +27,10 @@ class Preview extends React.Component {
   render() {
     return  <div className="comp-preview">
 
-      <Title></Title>
+      <Title
+        value={this.props.title}
+        onApplyEdit={(value) => this.updateTitle(value)}
+      ></Title>
 
       {/** members container */}
       <div style={{marginTop:"30px"}}>
@@ -60,7 +68,8 @@ class Preview extends React.Component {
 
 function select(state) {
   return {
-    members: state.members
+    title  : state.page.title,
+    members: state.page.members
   };
 }
 
