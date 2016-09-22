@@ -31,7 +31,7 @@ class TopNav extends React.Component {
                     &nbsp;Home
                   </a>
                   {/* TODO */}
-                  <a href="#" className="nav-item">
+                  <a href="#" className="nav-item is-disabled">
                     <span className="icon is-small">
                       <i className="fa fa-question"></i>
                     </span>

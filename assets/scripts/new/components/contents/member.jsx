@@ -2,7 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
+const ImagePlaceholderSize = 128;
+const ImagePlaceholderUrl  = `http://placehold.it/${ImagePlaceholderSize}x${ImagePlaceholderSize}?text=photo`;
+
 class ConfirmModal extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -57,19 +61,17 @@ class Member extends React.Component {
       const { dispatch } = this.props;
       
       const nameNode     = ReactDOM.findDOMNode(this.refs.nameInput);
-      const nameText     = nameNode.value.trim();
+      const name         = nameNode.value.trim();
+
       const positionNode = ReactDOM.findDOMNode(this.refs.positionInput);
-      const positionText = positionNode.value.trim();
+      const position     = positionNode.value.trim();
+
       const descNode     = ReactDOM.findDOMNode(this.refs.descInput);
-      const descText     = descNode.value;
+      const desc         = descNode.value;
 
-      console.log(descText);
+      const image = this.refs.imageView.src;
 
-      this.props.onApplyEdit({
-        name    : nameText,
-        position: positionText,
-        desc    : descText
-      });
+      this.props.onApplyEdit({image, name, position, desc});
     }
   }
 
@@ -77,11 +79,37 @@ class Member extends React.Component {
     this.refs.confRemove.show();
   }
 
+  changeImageInput(e) {
+    if(e.target.files && e.target.files[0]) {
+      var reader = new FileReader();
+      reader.onload = (e) => {
+        this.refs.imageView.src = e.target.result;
+      }
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  }
+
+  openImageInput() {
+    this.refs.imageInput.click();
+  }
+
   render() {
     return  <div className="comp-member media">
       <div className="media-left">
         <p className="image is-128x128">
-          <img src="http://placehold.it/128x128?text=photo"/>
+          {
+            (() => {
+              if(this.state.isEditing) {
+                return <span>
+                  <img ref="imageView" src={this.props.image ? this.props.image : ImagePlaceholderUrl} style={{width:`${ImagePlaceholderSize}px`, height:`${ImagePlaceholderSize}px`}}/>
+                  <button onClick={(e) => this.openImageInput(e)} className="button is-blocked" style={{width:`${ImagePlaceholderSize}px`, marginTop: "5px"}}>Choose Image</button>
+                  <input onChange={(e) => this.changeImageInput(e)} ref="imageInput" style={{display:"none"}}  type="file" accept="image/*"/>
+                </span>
+              } else {
+                return <img src={this.props.image ? this.props.image : ImagePlaceholderUrl} style={{width:`${ImagePlaceholderSize}px`, height:`${ImagePlaceholderSize}px`}}/>
+              }
+            })()
+          }
         </p>
       </div>
 

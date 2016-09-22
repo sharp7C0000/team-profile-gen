@@ -44,6 +44,7 @@ class Preview extends React.Component {
                 key={index} 
                 onClickRemove={() => this.removeMem(index)}
                 onApplyEdit={(values) => this.updateMem(index, values)}
+                image={member.image}
                 name={member.name}
                 position={member.position}
                 desc={member.desc}
