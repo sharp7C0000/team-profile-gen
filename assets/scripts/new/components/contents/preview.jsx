@@ -5,7 +5,14 @@ import { connect } from 'react-redux';
 import Title  from './title.jsx';
 import Member from './member.jsx';
 
+import { removeMember } from '../../redux/actions';
+
 class Preview extends React.Component {
+
+  removeMem (index) {
+    const { dispatch } = this.props;
+     dispatch(removeMember(index));
+  }
 
   render() {
     return  <div className="comp-preview">
@@ -28,7 +35,7 @@ class Preview extends React.Component {
                 </section>
             } else {
               return this.props.members.map((member, index) => {
-                return  <Member key={index}></Member>
+                return  <Member key={index} onClickRemove={() => this.removeMem(index)}></Member>
               });
             }
           })()

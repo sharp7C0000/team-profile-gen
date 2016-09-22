@@ -43,7 +43,7 @@ class Member extends React.Component {
     super(props);
 
     this.state = {
-      isEditing         : false
+      isEditing: false
     }
   }
 
@@ -63,10 +63,6 @@ class Member extends React.Component {
 
   confirmRemove() {
     this.refs.confRemove.show();
-  }
-
-  remove() {
-    
   }
 
   render() {
@@ -131,7 +127,7 @@ class Member extends React.Component {
       </div>
 
       {/* confirm modal */}
-      <ConfirmModal ref="confRemove" okCallback={() => this.remove()}></ConfirmModal>
+      <ConfirmModal ref="confRemove" okCallback={() => this.props.onClickRemove()}></ConfirmModal>
 
     </div>
   }

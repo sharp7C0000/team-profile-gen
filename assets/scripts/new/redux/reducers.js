@@ -6,7 +6,7 @@
 */
 
 import { combineReducers } from 'redux';
-import { UPDATE_TITLE, ADD_MEMBER }  from './actions';
+import { UPDATE_TITLE, ADD_MEMBER, REMOVE_MEMBER }  from './actions';
 
 function title(state = null, action) {
   switch (action.type) {
@@ -25,6 +25,11 @@ function members(state = [], action) {
         position : null,
         desc     : null
       }];
+    case REMOVE_MEMBER:
+      return [
+        ...state.slice(0, action.index),
+        ...state.slice(action.index + 1)
+      ];
     default:
       return state;
   }
