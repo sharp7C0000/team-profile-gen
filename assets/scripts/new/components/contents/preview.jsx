@@ -5,13 +5,18 @@ import { connect } from 'react-redux';
 import Title  from './title.jsx';
 import Member from './member.jsx';
 
-import { removeMember } from '../../redux/actions';
+import { removeMember, updateMember } from '../../redux/actions';
 
 class Preview extends React.Component {
 
   removeMem (index) {
     const { dispatch } = this.props;
-     dispatch(removeMember(index));
+    dispatch(removeMember(index));
+  }
+
+  updateMem (index, values) {
+    const { dispatch } = this.props;
+    dispatch(updateMember(index, values));
   }
 
   render() {
@@ -35,7 +40,14 @@ class Preview extends React.Component {
                 </section>
             } else {
               return this.props.members.map((member, index) => {
-                return  <Member key={index} onClickRemove={() => this.removeMem(index)}></Member>
+                return  <Member 
+                key={index} 
+                onClickRemove={() => this.removeMem(index)}
+                onApplyEdit={(values) => this.updateMem(index, values)}
+                name={member.name}
+                position={member.position}
+                desc={member.desc}
+              ></Member>
               });
             }
           })()

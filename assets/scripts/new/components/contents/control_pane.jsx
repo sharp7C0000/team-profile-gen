@@ -42,7 +42,7 @@ class ControlPane extends React.Component {
 
             <div className="level-right">
               <div className="level-item">
-                <button className="button is-info is-outlined is-small">
+                <button className="button is-info is-outlined is-disabled is-small">
                   <span className="icon is-small">
                     <i className="fa fa-plus"></i>
                   </span>
