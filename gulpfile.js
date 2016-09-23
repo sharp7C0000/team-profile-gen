@@ -30,8 +30,8 @@ gulp.task('ncu', function(done) {
  */
 gulp.task("hapi", function(callback) {
   exec('node server.js', function (err, stdout, stderr) {
-    console.log(stdout);
-    console.log(stderr);
+    gutil.log(stdout);
+    gutil.log(stderr);
     callback(err);
   });
 });

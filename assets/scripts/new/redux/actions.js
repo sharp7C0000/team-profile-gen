@@ -37,7 +37,7 @@ export function savePage(formData) {
     dispatch(requestSave());
 
     return request
-      .post('/api/save_test')
+      .post('/new/')
       .send(formData)
       .end((err, res) => {
         dispatch(receiveSave())
