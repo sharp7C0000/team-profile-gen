@@ -7,6 +7,27 @@
 
   <body>
     <h1>TODO <%= pageId %></h1>
+
+    <h2>PageTitle : <%= page.title %></h2>
+
+    <br>
+    <br>
+    <br>
+
+    <div>
+      <% page.members.forEach(function(v, i) { %>
+        <%= v.name %> <br/>
+        <%= v.position %> <br/>
+        <%= v.desc %> <br/>
+        <img src="data:image;base64,<%= v.image.toString('base64')%>"/>
+        <br>
+        <br>
+        <br>
+      <% });%>
+    </div>
+
+    <%= page %>
+
     <!--<div id="app"></div>-->
     <footer>
       <!-- dev mode -->

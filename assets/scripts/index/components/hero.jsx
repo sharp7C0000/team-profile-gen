@@ -61,7 +61,7 @@ class Hero extends React.Component {
           <div className="column is-12">
             <p className="control has-addons has-addons-centered">
               <input onKeyUp={(e) => this.typingPageID(e)}
-                className={"input is-medium " + (this.props.pageId.error ? 'is-danger' : '')} ref='pageIdInput' type="text" placeholder="Page ID (ex: ab1d2fg)">
+                className={"input is-medium " + (this.props.pageId.error ? 'is-danger' : '')} ref='pageIdInput' type="text" placeholder="Page ID (ex: ByZywUza)">
               </input>
               <a className={"button is-info is-medium " + (this.props.pageId.error || !this.props.pageId.dirty ? 'is-disabled' : '')} onClick={(e) => this.redirectToProfilePage(e)}>Go</a>
             </p>

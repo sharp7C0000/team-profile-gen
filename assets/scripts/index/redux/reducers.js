@@ -16,7 +16,7 @@ function pageId(state = { dirty: false }, action) {
             error: null,
             dirty: false
           });
-        case 7:
+        case 8:
           return Object.assign({}, defaultReturnState, {
             error: null,
             dirty: true

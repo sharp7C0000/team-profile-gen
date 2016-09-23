@@ -73,7 +73,14 @@ server.route({
   method: 'GET',
   path  : '/view/{pageId}',
   handler (request, reply) {
-    reply.view('view', {pageId: request.params.pageId});
+    Models.Page.findOne({_id: request.params.pageId}, function (err, doc){
+      if(err || !doc) {
+        console.log(err);
+        reply(err).code(404);
+      } else {
+        reply.view('view', {page: doc, pageId: request.params.pageId});
+      }
+    });
   }
 });
 
