@@ -5,8 +5,7 @@ const Hapi   = require('hapi');
 const Path   = require('path');
 
 const Mongoose = require('mongoose');
-
-const Models = require('./models.js');
+const Models   = require('./models.js');
 
 // TODO : check Config is valid
 const server = new Hapi.Server();
@@ -82,9 +81,43 @@ server.route({
 server.route({
   method: 'POST',
   path  : '/new/',
+  config: {
+    // TODO : payload validation
+    payload: {
+      maxBytes: 10048576
+    }
+  },
   handler (request, reply) {
-    console.log(request);
-    reply('bitch');
+
+    // Get Members
+    const counter = Array.from(Array(parseInt(request.payload.totalMember)).keys());
+    const members = counter.map((v, i) => {
+      return new Models.Member({
+        name    : request.payload[`member[${v}].name`],
+        position: request.payload[`member[${v}].position`],
+        desc    : request.payload[`member[${v}].desc`],
+        image   : request.payload[`member[${v}].image`]
+      });
+    });
+
+    const newPage = new Models.Page({
+      title  : request.payload.title,
+      members
+    });
+    
+    newPage.save((err, page) => {
+      if (err) {
+        console.log(err);
+        reply(err).code(500);
+      } else {
+        reply({
+          // if success send url
+          data: {
+            url: page._id
+          }
+        }).code(200);
+      }
+    });
   }
 });
 

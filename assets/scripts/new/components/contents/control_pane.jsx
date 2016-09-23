@@ -106,13 +106,15 @@ function select(state) {
   fd.append("title", state.page.title);
 
   state.page.members.forEach((member, index) => {
-    fd.append(`name[${index}]`, member.name);
-    fd.append(`position[${index}]`, member.position);
-    fd.append(`desc[${index}]`, member.desc);
+    fd.append(`member[${index}].name`, member.name);
+    fd.append(`member[${index}].position`, member.position);
+    fd.append(`member[${index}].desc`, member.desc);
     if(member.image) {
-      fd.append(`image[${index}]`, toBlob(member.image), "ifile");
+      fd.append(`member[${index}].image`, toBlob(member.image), "ifile");
     }
   });
+
+  fd.append("totalMember", state.page.members.length);
 
   return {
     serialized: fd

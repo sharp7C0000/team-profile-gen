@@ -1,15 +1,19 @@
 const mongoose = require('mongoose');
 const Types    = mongoose.Schema.Types;
+const ShortID  = require('shortid');
 
 const memberSchema = mongoose.Schema({
   name    : Types.String,
   position: Types.String,
   desc    : Types.String,
-  photo   : Types.Buffer
+  image   : Types.Buffer
 });
 
 const pageSchema = mongoose.Schema({
-  url    : Types.String,
+  _id: {
+    type     : String,
+    'default': ShortID.generate
+  },
   title  : Types.String,
   members: [memberSchema]
 });
