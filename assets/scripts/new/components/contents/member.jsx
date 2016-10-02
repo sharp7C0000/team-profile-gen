@@ -2,44 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
+import ConfirmModal from '../../../common/components/confirm_modal.jsx';
+
 const ImagePlaceholderSize = 128;
 const ImagePlaceholderUrl  = `http://placehold.it/${ImagePlaceholderSize}x${ImagePlaceholderSize}?text=photo`;
-
-class ConfirmModal extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false
-    }
-  }
-
-  show () {
-    this.setState({isOpen: true});
-  }
-
-  dismiss (applyOk = false) {
-    this.setState({isOpen: false});
-    if(applyOk) {
-      this.props.okCallback();
-    }
-  }
-
-  render () {
-    return <div className={"modal " + (this.state.isOpen ? "is-active" : "")}>
-      <div className="modal-background"></div>
-      <div className="modal-card">
-        <section className="modal-card-body">
-          Want a remove this member?
-        </section>
-        <footer className="modal-card-foot">
-          <button onClick={this.dismiss.bind(this, true)} type="button" className="button is-primary">Yes</button>
-          <button onClick={this.dismiss.bind(this, false)} type="button" className="button">No</button>
-        </footer>
-      </div>
-    </div>
-  }
-}
 
 class Member extends React.Component {
 
@@ -232,8 +198,9 @@ class Member extends React.Component {
         })()}
       </div>
 
-      {/* confirm modal */}
-      <ConfirmModal ref="confRemove" okCallback={() => this.props.onClickRemove()}></ConfirmModal>
+      {/* confirm remove modal */}
+      {/* TODO : use one global modal */}
+      <ConfirmModal ref="confRemove" message="Want a remove this member?" okCallback={() => this.props.onClickRemove()}></ConfirmModal>
 
     </div>
   }

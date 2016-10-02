@@ -78,7 +78,7 @@ class Hero extends React.Component {
         </div>
 
         <div className="copyright">
-          Created by <strong>Noesis Mik</strong> | <a href="https://github.com/sharp7C0000" target="_blank"><i className="fa fa-github"></i> Github</a>
+          Created by <strong>Noesis Mik</strong> | <a href="https://github.com/sharp7C0000/team-profile-gen" target="_blank"><i className="fa fa-github"></i> Github</a>
         </div>
       </div>
 

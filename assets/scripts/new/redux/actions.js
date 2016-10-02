@@ -4,8 +4,11 @@ export const UPDATE_TITLE  = 'UPDATE_TITLE';
 export const ADD_MEMBER    = 'ADD_MEMBER';
 export const REMOVE_MEMBER = 'REMOVE_MEMBER';
 export const UPDATE_MEMBER = 'UPDATE_MEMBER';
-export const REQUEST_SAVE  = 'REQUEST_SAVE';
-export const RECEIVE_SAVE  = 'RECEIVE_SAVE';
+export const RESET         = "RESET";
+
+export const REQUEST_SAVE      = 'REQUEST_SAVE';
+export const REQUEST_SAVE_FAIL = "REQUEST_SAVE_FAIL"
+export const RECEIVE_SAVE      = 'RECEIVE_SAVE';
 
 export function updateTitle(value) {
   return { type: UPDATE_TITLE, value }
@@ -23,12 +26,20 @@ export function updateMember(index, values) {
   return { type: UPDATE_MEMBER, index, values }
 }
 
+export function resetPage() {
+  return { type: RESET }
+}
+
 function requestSave() {
   return { type: REQUEST_SAVE }
 }
 
-function receiveSave() {
-  return { type: RECEIVE_SAVE }
+function requestSaveFail(err) {
+  return { type: REQUEST_SAVE_FAIL, err }
+}
+
+function receiveSave(pageId) {
+  return { type: RECEIVE_SAVE, pageId }
 }
 
 export function savePage(formData) {
@@ -40,7 +51,12 @@ export function savePage(formData) {
       .post('/new/')
       .send(formData)
       .end((err, res) => {
-        dispatch(receiveSave())
+        console.log(err, res);
+        if(err) {
+          dispatch(requestSaveFail(err))
+        } else {
+          dispatch(receiveSave(res.body.data.url))
+        }
       });
   }
 }

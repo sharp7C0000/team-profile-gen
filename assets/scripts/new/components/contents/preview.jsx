@@ -68,8 +68,8 @@ class Preview extends React.Component {
 
 function select(state) {
   return {
-    title  : state.page.title,
-    members: state.page.members
+    title   : state.page.title,
+    members : state.page.members
   };
 }
 
