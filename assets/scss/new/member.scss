@@ -1,0 +1,19 @@
+@import '~bulma/sass/utilities/variables';
+
+.comp-member {
+  .view-name {
+    height     : 40px;
+    line-height: 40px;
+  }
+  .view-desc {
+    white-space: pre-wrap;
+  }
+  .input-image {
+    input {
+      display: none;
+    }
+    button {
+      margin-top: 5px;
+    }
+  }
+}

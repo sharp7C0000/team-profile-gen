@@ -1,39 +1,28 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
+
+require("../../../../scss/new/preview.scss");
 
 import Title  from './title.jsx';
 import Member from './member.jsx';
+
+import ConfirmModal from '../../../common/components/confirm_modal.jsx';
 
 import { removeMember, updateMember, updateTitle } from '../../redux/actions';
 
 class Preview extends React.Component {
 
-  updateTitle (value) {
-    const { dispatch } = this.props;
-    dispatch(updateTitle(value));
-  }
-
-  removeMem (index) {
-    const { dispatch } = this.props;
-    dispatch(removeMember(index));
-  }
-
-  updateMem (index, values) {
-    const { dispatch } = this.props;
-    dispatch(updateMember(index, values));
-  }
-
   render() {
+
     return  <div className="comp-preview">
 
       <Title
         value={this.props.title}
-        onApplyEdit={(value) => this.updateTitle(value)}
+        onApplyEdit={(value) => this.props.onUpdateTitle(value)}
       ></Title>
 
       {/** members container */}
-      <div style={{marginTop:"30px"}}>
+      <div className="member-container">
         {
           (() => {
             if(this.props.members.length == 0) {
@@ -49,13 +38,10 @@ class Preview extends React.Component {
             } else {
               return this.props.members.map((member, index) => {
                 return  <Member 
-                key={index} 
-                onClickRemove={() => this.removeMem(index)}
-                onApplyEdit={(values) => this.updateMem(index, values)}
-                image={member.image}
-                name={member.name}
-                position={member.position}
-                desc={member.desc}
+                key={index} image={member.image} name={member.name}
+                position={member.position} desc={member.desc}
+                onApplyRemove={() => this.props.onRemoveMem(index)}
+                onApplyEdit={(values) => this.props.onUpdateMem(index, values)}
               ></Member>
               });
             }
@@ -66,11 +52,27 @@ class Preview extends React.Component {
   }
 }
 
-function select(state) {
+const mapStateToProps = (state) => {
   return {
     title   : state.page.title,
     members : state.page.members
   };
 }
 
-export default connect(select)(Preview);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onUpdateTitle (value) {
+      dispatch(updateTitle(value));
+    },
+
+    onRemoveMem (index) {
+      dispatch(removeMember(index));
+    },
+
+    onUpdateMem (index, values) {
+      dispatch(updateMember(index, values));
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Preview);

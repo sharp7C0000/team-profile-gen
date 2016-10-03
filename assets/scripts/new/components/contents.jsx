@@ -1,9 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
-import ControlPane from './contents/control_pane.jsx';
-import Preview     from './contents/preview.jsx';
+import ControlPane  from './contents/control_pane.jsx';
+import Preview      from './contents/preview.jsx';
 
 require("../../../scss/new/contents.scss");
 
@@ -38,5 +37,4 @@ class Contents extends React.Component {
   }
 }
 
-
-export default (Contents);
+export default connect()(Contents);

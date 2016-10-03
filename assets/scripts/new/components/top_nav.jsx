@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
 
 require("../../../scss/new/top_nav.scss");
 
@@ -47,5 +45,4 @@ class TopNav extends React.Component {
   }
 }
 
-
-export default (TopNav);
+export default TopNav;

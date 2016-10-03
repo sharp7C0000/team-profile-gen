@@ -26,6 +26,9 @@ export function updateMember(index, values) {
   return { type: UPDATE_MEMBER, index, values }
 }
 
+/**
+ * deep : if true reset all data
+ */
 export function resetPage(deep = false) {
   return { type: RESET, deep }
 }
@@ -49,7 +52,7 @@ export function savePage(formData) {
 
     // TODO : change promise
     return request
-      .post('/new/')
+      .post('/new/sdfsdf')
       .send(formData)
       .end((err, res) => {
         if(err) {

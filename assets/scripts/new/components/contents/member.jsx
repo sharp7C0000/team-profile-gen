@@ -1,8 +1,9 @@
-import React from 'react';
+import React    from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
 
 import ConfirmModal from '../../../common/components/confirm_modal.jsx';
+
+require("../../../../scss/new/member.scss");
 
 const ImagePlaceholderSize = 128;
 const ImagePlaceholderUrl  = `http://placehold.it/${ImagePlaceholderSize}x${ImagePlaceholderSize}?text=photo`;
@@ -11,6 +12,11 @@ class Member extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.styImage = {
+      width :`${ImagePlaceholderSize}px`, 
+      height:`${ImagePlaceholderSize}px`
+    }
 
     this.state = {
       isEditing: false
@@ -62,17 +68,17 @@ class Member extends React.Component {
   render() {
     return  <div className="comp-member media">
       <div className="media-left">
-        <p className="image is-128x128">
+        <p className={`image is-${ImagePlaceholderSize}x${ImagePlaceholderSize}`}>
           {
             (() => {
               if(this.state.isEditing) {
-                return <span>
-                  <img ref="imageView" src={this.props.image ? this.props.image : ImagePlaceholderUrl} style={{width:`${ImagePlaceholderSize}px`, height:`${ImagePlaceholderSize}px`}}/>
-                  <button onClick={(e) => this.openImageInput(e)} className="button is-blocked" style={{width:`${ImagePlaceholderSize}px`, marginTop: "5px"}}>Choose Image</button>
-                  <input onChange={(e) => this.changeImageInput(e)} ref="imageInput" style={{display:"none"}}  type="file" accept="image/*"/>
+                return <span className="input-image">
+                  <img ref="imageView" src={this.props.image ? this.props.image : ImagePlaceholderUrl} style={this.styImage}/>
+                  <button onClick={(e) => this.openImageInput(e)} className="button is-blocked" style={{width:`${ImagePlaceholderSize}px`}}>Choose Image</button>
+                  <input onChange={(e) => this.changeImageInput(e)} ref="imageInput" type="file" accept="image/*"/>
                 </span>
               } else {
-                return <img src={this.props.image ? this.props.image : ImagePlaceholderUrl} style={{width:`${ImagePlaceholderSize}px`, height:`${ImagePlaceholderSize}px`}}/>
+                return <img src={this.props.image ? this.props.image : ImagePlaceholderUrl} style={this.styImage}/>
               }
             })()
           }
@@ -92,7 +98,7 @@ class Member extends React.Component {
                   />
                 </p>
               } else {
-                return <div className={"title is-4 " + (this.props.name ? "" : "placeholder")} style={{height:"40px", lineHeight: "40px"}}>
+                return <div className={"view-name title is-4 " + (this.props.name ? "" : "placeholder")}>
                   {
                     (() => {
                       if(this.props.name) {
@@ -142,7 +148,7 @@ class Member extends React.Component {
                     </textarea>
                   </p>
               } else {
-                return <p className={(this.props.desc ? "" : "placeholder")} style={{whiteSpace: "pre-wrap"}}>
+                return <p className={"view-desc " + (this.props.desc ? "" : "placeholder")}>
                   {
                     (() => {
                       if(this.props.desc) {
@@ -171,12 +177,12 @@ class Member extends React.Component {
                 </span>
                 <span>ok</span>
               </a>&nbsp;
-              <button type="button" onClick={this.exitEdit.bind(this, false)} className="button is-small is-danger is-outlined">
+              <a href="#" onClick={(e) => { e.preventDefault();this.exitEdit.bind(this, false)() }} className="button is-small is-danger is-outlined">
                 <span className="icon is-small">
                   <i className="fa fa-times"></i>
                 </span>
                 <span>cancel</span>
-              </button>
+              </a>
             </span>
           } else {
             {/** not edit mode **/}
@@ -199,11 +205,13 @@ class Member extends React.Component {
       </div>
 
       {/* confirm remove modal */}
-      {/* TODO : use one global modal */}
-      <ConfirmModal ref="confRemove" message="Want a remove this member?" okCallback={() => this.props.onClickRemove()}></ConfirmModal>
+      <ConfirmModal ref="confRemove" 
+        message="Want a remove this member?" 
+        okCallback={() => this.props.onApplyRemove()}>
+      </ConfirmModal>
 
     </div>
   }
 }
 
-export default (Member);
+export default Member;

@@ -1,0 +1,10 @@
+@import '~bulma/sass/utilities/variables';
+
+.comp-preview {
+  .placeholder {
+    color: $grey-light!important;
+  }
+  .member-container {
+    margin-top: 30px
+  }
+}
