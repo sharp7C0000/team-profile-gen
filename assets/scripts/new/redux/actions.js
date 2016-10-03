@@ -26,8 +26,8 @@ export function updateMember(index, values) {
   return { type: UPDATE_MEMBER, index, values }
 }
 
-export function resetPage() {
-  return { type: RESET }
+export function resetPage(deep = false) {
+  return { type: RESET, deep }
 }
 
 function requestSave() {
@@ -47,13 +47,17 @@ export function savePage(formData) {
 
     dispatch(requestSave());
 
+    // TODO : change promise
     return request
       .post('/new/')
       .send(formData)
       .end((err, res) => {
-        console.log(err, res);
         if(err) {
-          dispatch(requestSaveFail(err))
+          if(res && res.body && res.body.message) {
+            dispatch(requestSaveFail(res.body.message))
+          } else {
+            dispatch(requestSaveFail(["Server Error"]))
+          }
         } else {
           dispatch(receiveSave(res.body.data.url))
         }

@@ -76,14 +76,23 @@ function page(state = {
       })
 
     case RESET:
-      return {
-        isSaving    : false,
-        savingError : [],
-        savingResult: null,
-        title       : "",
-        members     : []
+
+      if(action.deep) {
+        return {
+          isSaving    : false,
+          savingError : [],
+          savingResult: null,
+          title       : "",
+          members     : []
+        }
+      } else {
+        return Object.assign({}, state, {
+          isSaving    : false,
+          savingResult: null,
+          savingError : []
+        })
       }
-    
+
     default:
       return Object.assign({}, state, {
         title  : title(state.title, action),

@@ -20,6 +20,34 @@ class ProgressIndicator extends React.Component {
   }
 }
 
+class SaveErrorModal extends React.Component {
+
+  render () {
+    return <div className="modal is-active">
+      <div className="modal-background"></div>
+      <div className="modal-card">
+        <header className="modal-card-head">
+          <p className="modal-card-title">Save fail</p>
+        </header>
+        <section className="modal-card-body">
+          <ul>
+            {
+              (() => {
+                return this.props.message.map((msg) => {
+                  return <li>{msg}</li>
+                });
+              })()
+            } 
+          </ul>
+        </section>
+        <footer className="modal-card-foot">
+          <button onClick={(e) => this.props.onDismiss(e)} type="button" className="button">Ok</button>
+        </footer>
+      </div>
+    </div>
+  }
+}
+
 class SaveSuccessModal extends React.Component {
 
   render () {
@@ -62,10 +90,10 @@ class ControlPane extends React.Component {
     this.refs.confSave.show();
   }
 
-  reset (e) {
+  reset (e, deep) {
     e.preventDefault();
     const { dispatch } = this.props;
-    dispatch(resetPage());
+    dispatch(resetPage(deep));
   }
 
   saveProcess () {
@@ -149,7 +177,10 @@ class ControlPane extends React.Component {
             return <ProgressIndicator></ProgressIndicator>
           } else {
             if(this.props.savingResult) {
-              return <SaveSuccessModal pageId={this.props.savingResult} onDismiss={(e) => this.reset(e)}></SaveSuccessModal>
+              return <SaveSuccessModal pageId={this.props.savingResult} onDismiss={(e) => this.reset(e, true)}></SaveSuccessModal>
+            }
+            if(this.props.savingError.length > 0) {
+              return <SaveErrorModal message={this.props.savingError} onDismiss={(e) => this.reset(e, false)}></SaveErrorModal>
             }
           }
         })()
@@ -190,6 +221,7 @@ function select(state) {
   return {
     isSaving    : state.page.isSaving,
     savingResult: state.page.savingResult,
+    savingError : state.page.savingError,
     serialized  : fd
   };
 }

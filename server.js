@@ -115,7 +115,7 @@ server.route({
     newPage.save((err, page) => {
       if (err) {
         console.log(err);
-        reply(err).code(500);
+        reply([err.message]).code(500);
       } else {
         reply({
           // if success send url
