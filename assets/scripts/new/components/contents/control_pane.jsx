@@ -64,15 +64,15 @@ class SaveSuccessModal extends React.Component {
           
               <p className="title is-4">Page ID is</p>
               <div className="box">
-                <p className="subtitle is-4">{this.props.pageId}</p>
+                <p className="subtitle is-4">{this.props.pageInfo.id}</p>
               </div>
-              Direct link : <a href={"http://localhost:8989/view/" + this.props.pageId}>
-                {"http://localhost:8989/view/" + this.props.pageId}
+              Direct link : <a href={this.props.pageInfo.url}>
+                {this.props.pageInfo.url}
               </a>
 
           </section>
             <footer className="modal-card-foot">
-            <a href={"http://localhost:8989/view/" + this.props.pageId} className="button is-primary">View page</a>
+            <a href={this.props.pageInfo.url} className="button is-primary">View page</a>
             <button type="button" onClick={(e) => this.props.onDismiss(e)} className="button">Once again</button>
           </footer>
         </div>
@@ -162,7 +162,7 @@ class ControlPane extends React.Component {
             return <ProgressIndicator></ProgressIndicator>
           } else {
             if(this.props.savingResult) {
-              return <SaveSuccessModal pageId={this.props.savingResult} onDismiss={(e) => this.props.onDismissSaveSuccess(true)}></SaveSuccessModal>
+              return <SaveSuccessModal pageInfo={this.props.savingResult} onDismiss={(e) => this.props.onDismissSaveSuccess(true)}></SaveSuccessModal>
             }
             if(this.props.savingError.length > 0) {
               return <SaveErrorModal message={this.props.savingError} onDismiss={(e) => this.props.onDismissSaveError(false)}></SaveErrorModal>

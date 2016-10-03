@@ -41,8 +41,8 @@ function requestSaveFail(err) {
   return { type: REQUEST_SAVE_FAIL, err }
 }
 
-function receiveSave(pageId) {
-  return { type: RECEIVE_SAVE, pageId }
+function receiveSave(pageInfo) {
+  return { type: RECEIVE_SAVE, pageInfo }
 }
 
 export function savePage(formData) {
@@ -62,7 +62,7 @@ export function savePage(formData) {
             dispatch(requestSaveFail(["Server Error"]))
           }
         } else {
-          dispatch(receiveSave(res.body.data.url))
+          dispatch(receiveSave(res.body.data))
         }
       });
   }

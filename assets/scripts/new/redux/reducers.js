@@ -64,7 +64,7 @@ function page(state = {
     case RECEIVE_SAVE:
       return Object.assign({}, state, {
         isSaving    : false,
-        savingResult: action.pageId,
+        savingResult: action.pageInfo,
         savingError : []
       })
 

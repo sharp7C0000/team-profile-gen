@@ -117,10 +117,14 @@ server.route({
         console.log(err);
         reply([err.message]).code(500);
       } else {
+        
+        const pageUrl = request.connection.info.protocol + '://' + request.info.host + "/view/" + page._id;
+
         reply({
-          // if success send url
+          // if success send page id and url
           data: {
-            url: page._id
+            id    : page._id,
+            url   : pageUrl
           }
         }).code(200);
       }
