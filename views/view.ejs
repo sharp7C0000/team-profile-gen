@@ -19,7 +19,9 @@
         <%= v.name %> <br/>
         <%= v.position %> <br/>
         <%= v.desc %> <br/>
-        <img src="data:image;base64,<%= v.image.toString('base64')%>"/>
+        <% if(v.image) { %>
+          <img style="width:128px;height:128px;" src="data:image;base64,<%= v.image.toString('base64')%>"/>
+        <% } %>
         <br>
         <br>
         <br>
