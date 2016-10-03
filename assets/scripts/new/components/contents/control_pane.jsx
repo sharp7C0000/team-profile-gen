@@ -1,20 +1,23 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
+import { dataURIToBlob } from "../../../common/util.js";
+
 import ConfirmModal from '../../../common/components/confirm_modal.jsx';
+
+require("../../../../scss/new/control_pane.scss");
 
 import { addMember, savePage, resetPage } from '../../redux/actions';
 
 class ProgressIndicator extends React.Component {
   render () {
-    return <div className="modal is-active">
+    return <div className="comp-progress-indicator modal is-active">
       <div className="modal-background"></div>
-      <div className="modal-content" style={{textAlign:"center", color: "#fff", overflow: "visible"}}>
+      <div className="modal-content">
         <span className="icon is-large">
           <i className="fa fa-spinner fa-pulse fa-fw"></i>
         </span>
-        <div className="title is-1" style={{color: "#FFF"}}>Save in progress</div>
+        <div className="title is-1">Save in progress</div>
       </div>
     </div>
   }
@@ -33,8 +36,8 @@ class SaveErrorModal extends React.Component {
           <ul>
             {
               (() => {
-                return this.props.message.map((msg) => {
-                  return <li>{msg}</li>
+                return this.props.message.map((msg, index) => {
+                  return <li key={index}>{msg}</li>
                 });
               })()
             } 
@@ -51,13 +54,13 @@ class SaveErrorModal extends React.Component {
 class SaveSuccessModal extends React.Component {
 
   render () {
-    return <div className="modal is-active">
+    return <div className="comp-save-success-modal modal is-active">
         <div className="modal-background"></div>
         <div className="modal-card">
           <header className="modal-card-head">
             <p className="modal-card-title">Save success</p>
           </header>
-          <section className="modal-card-body" style={{textAlign: "center"}}>
+          <section className="modal-card-body">
           
               <p className="title is-4">Page ID is</p>
               <div className="box">
@@ -78,27 +81,10 @@ class SaveSuccessModal extends React.Component {
 }
 
 class ControlPane extends React.Component {
-
-  add (e) {
-    e.preventDefault();
-    const { dispatch } = this.props;
-    dispatch(addMember());
-  }
-
-  save (e) {
+  
+  onClickSave (e) {
     e.preventDefault();
     this.refs.confSave.show();
-  }
-
-  reset (e, deep) {
-    e.preventDefault();
-    const { dispatch } = this.props;
-    dispatch(resetPage(deep));
-  }
-
-  saveProcess () {
-    const { dispatch } = this.props;
-    dispatch(savePage(this.props.serialized));
   }
 
   render() {
@@ -110,7 +96,7 @@ class ControlPane extends React.Component {
           Control panel
         </p>
 
-        <a className="panel-block" href="#" onClick={(e) => this.add(e)}>
+        <a className="panel-block" href="#" onClick={(e) => { e.preventDefault(); this.props.onClickAdd() }}>
           <span className="panel-icon">
             <i className="fa fa-plus"></i>
           </span>
@@ -155,7 +141,7 @@ class ControlPane extends React.Component {
        */}
 
         <div className="panel-block">
-          <button onClick={(e) => this.save(e)} className="button is-primary is-fullwidth">
+          <button onClick={(e) => this.onClickSave(e)} className="button is-primary is-fullwidth">
             <span className="icon is-small">
               <i className="fa fa-floppy-o"></i>
             </span>
@@ -168,8 +154,7 @@ class ControlPane extends React.Component {
       </div>
 
       {/* confirm save modal */}
-      {/* TODO : use one global modal */}
-      <ConfirmModal ref="confSave" message="Really want a save this page?" okCallback={() => this.saveProcess()}></ConfirmModal>
+      <ConfirmModal ref="confSave" message="Really want a save this page?" okCallback={() => this.props.onConfirmSave(this.props.serialized)}></ConfirmModal>
 
       {
         (() => {
@@ -177,10 +162,10 @@ class ControlPane extends React.Component {
             return <ProgressIndicator></ProgressIndicator>
           } else {
             if(this.props.savingResult) {
-              return <SaveSuccessModal pageId={this.props.savingResult} onDismiss={(e) => this.reset(e, true)}></SaveSuccessModal>
+              return <SaveSuccessModal pageId={this.props.savingResult} onDismiss={(e) => this.props.onDismissSaveSuccess(true)}></SaveSuccessModal>
             }
             if(this.props.savingError.length > 0) {
-              return <SaveErrorModal message={this.props.savingError} onDismiss={(e) => this.reset(e, false)}></SaveErrorModal>
+              return <SaveErrorModal message={this.props.savingError} onDismiss={(e) => this.props.onDismissSaveError(false)}></SaveErrorModal>
             }
           }
         })()
@@ -190,40 +175,51 @@ class ControlPane extends React.Component {
   }
 }
 
-function select(state) {
-
-  function toBlob(dataURL) {
-    if(dataURL) {
-      var arr = dataURL.split(','), mime = arr[0].match(/:(.*?);/)[1],
-          bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-      while(n--){
-          u8arr[n] = bstr.charCodeAt(n);
-      }
-      return new Blob([u8arr], {type:mime});
-    }
-  }
-
-  const fd = new FormData();
-
-  fd.append("title", state.page.title);
-
-  state.page.members.forEach((member, index) => {
-    fd.append(`member[${index}].name`, member.name);
-    fd.append(`member[${index}].position`, member.position);
-    fd.append(`member[${index}].desc`, member.desc);
-    if(member.image) {
-      fd.append(`member[${index}].image`, toBlob(member.image), "ifile");
-    }
-  });
-
-  fd.append("totalMember", state.page.members.length);
-
+const mapStateToProps = (state) => {
+ 
   return {
     isSaving    : state.page.isSaving,
     savingResult: state.page.savingResult,
     savingError : state.page.savingError,
-    serialized  : fd
+    serialized  : (() => {
+      const fd = new FormData();
+
+      fd.append("title", state.page.title);
+
+      state.page.members.forEach((member, index) => {
+        fd.append(`member[${index}].name`, member.name);
+        fd.append(`member[${index}].position`, member.position);
+        fd.append(`member[${index}].desc`, member.desc);
+        if(member.image) {
+          fd.append(`member[${index}].image`, dataURIToBlob(member.image), "ifile");
+        }
+      });
+
+      fd.append("totalMember", state.page.members.length);
+
+      return fd;
+    })()
   };
 }
 
-export default connect(select)(ControlPane);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onClickAdd () {
+      dispatch(addMember());
+    },
+
+    onDismissSaveError () {
+      dispatch(resetPage(false));
+    },
+
+    onDismissSaveSuccess () {
+      dispatch(resetPage(true));
+    },
+
+    onConfirmSave (serialized) {
+      dispatch(savePage(serialized));
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ControlPane);

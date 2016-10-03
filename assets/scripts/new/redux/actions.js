@@ -52,7 +52,7 @@ export function savePage(formData) {
 
     // TODO : change promise
     return request
-      .post('/new/sdfsdf')
+      .post('/new/')
       .send(formData)
       .end((err, res) => {
         if(err) {

@@ -101,7 +101,6 @@ function page(state = {
   }
 }
 
-
 const newApp = combineReducers({
   page
 });
