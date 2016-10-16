@@ -4,8 +4,23 @@ const Config = require('./config.js');
 const Hapi   = require('hapi');
 const Path   = require('path');
 
+// to compile jsx component
+require("babel-register")({
+  "presets": ["es2015", "react"]
+});
+
 const Mongoose = require('mongoose');
 const Models   = require('./models.js');
+
+const React          = require('react');
+const ReactDOMServer = require('react-dom/server');
+
+const createStore = require('redux').createStore;
+
+const Provider = require('react-redux').Provider;
+
+const ViewApp = require('./assets/scripts/view/components/app.jsx').default;
+const viewApp = require('./assets/scripts/view/redux/reducers').default;
 
 // TODO : check Config is valid
 const server = new Hapi.Server();
@@ -78,7 +93,44 @@ server.route({
         console.log(err);
         reply(err).code(404);
       } else {
-        reply.view('view', {page: doc, pageId: request.params.pageId});
+
+        let members = doc.members.map((m) => {
+
+          let image = null;
+
+          if(m.image) {
+            image = `data:image;base64,${m.image.toString('base64')}`;
+          }
+
+          return {
+            image   : image,
+            name    : m.name,
+            position: m.position,
+            desc    : m.desc
+          }
+        });
+        
+        const preloadedState = { page: {
+            title  : doc.title,
+            members: members
+          }
+        };
+
+        // Create a new Redux store instance
+        const store = createStore(viewApp, preloadedState)
+
+        // Grab the initial state from our Redux store
+        const finalState = store.getState()
+
+        reply.view('view', {
+          page  : doc, 
+          pageId: request.params.pageId,
+          
+          preloadedState: finalState,
+          markup        : ReactDOMServer.renderToString(React.createElement(Provider, {store: store}, 
+            React.createElement(ViewApp)
+          ))
+        });
       }
     });
   }
