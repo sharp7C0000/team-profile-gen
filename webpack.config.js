@@ -1,19 +1,22 @@
-const babelLoader           = require('babel-loader');
 const babelTransformRuntime = require('babel-plugin-transform-runtime');
 
-const path        = require("path");
-const glob        = require('glob');
-const webpack     = require('webpack');
+const path    = require("path");
+const glob    = require('glob');
+const webpack = require('webpack');
 
-const ENTRY_PATTERN = "./assets/scripts/**/entry.jsx";
+const ENTRY_PATTERN = "./assets/**/main.jsx";
 const VENDOR_CHUNK  = "vendor";
 const VENDORS = [
   "react",
   "react-dom",
-  "redux"
+  "redux",
+  "react-redux"
 ];
 
 var webpackEntry = {};
+
+// vendor
+webpackEntry[VENDOR_CHUNK] = VENDORS;
 
 // common bundles
 glob.sync(ENTRY_PATTERN).forEach((file) => {
@@ -21,53 +24,37 @@ glob.sync(ENTRY_PATTERN).forEach((file) => {
   webpackEntry[entryName] = file;
 });
 
-// vendor
-webpackEntry[VENDOR_CHUNK] = VENDORS;
-
 module.exports = {
   entry: webpackEntry,
+  
   output: {
-    path    : __dirname,
-    filename: "[name].bundle.js"
+    path         : path.join(__dirname, "/public"),
+    filename     : "[name].bundle.js",
+    publicPath   : "/assets/"
   },
-  babel: {
-    presets: ['es2015', 'react'],
-    plugins: ['transform-runtime']
+
+  devServer: {
+    host        : "0.0.0.0",
+    port        : 6767,
+    contentBase : "./assets",
+    inline      : true,
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll            : 1000
+    }
   },
+
   module: {
     loaders: [
       // babel loader
       {
-        test: /\.jsx$/,
+        test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'babel',
         query: {
           presets: ['es2015', 'react'],
           plugins: ['transform-runtime']
         }
-      },
-
-      // babel loader
-      {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: 'babel',
-        query: {
-          presets: ['es2015'],
-          plugins: ['transform-runtime']
-        }
-      },
-      
-      // sass loader
-      {
-        test: /\.scss$/,
-        loaders: ["style", "css", "sass"]
-      },
-
-      // css loader
-      { 
-        test: /\.css$/, 
-        loader: "style-loader!css-loader" 
       },
       // font loader
       {

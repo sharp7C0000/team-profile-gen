@@ -41,7 +41,8 @@ server.register(require('vision'), (err) => {
   }
 
   const globalViewContext = {
-    title: 'Team Profile Page Generator'
+    title: 'Team Profile Page Generator',
+    mode : process.env.NODE_ENV
   };
 
   server.views({
@@ -57,7 +58,7 @@ server.register(require('vision'), (err) => {
 // GET : server public files
 server.route({
   method: 'GET',
-  path: '/assets/{param*}',
+  path: '/public/{param*}',
   handler: {
     directory: {
       path: 'public'

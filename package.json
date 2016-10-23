@@ -6,11 +6,11 @@
   "dependencies": {
     "babel": "^6.5.2",
     "babel-register": "^6.16.3",
-    "bulma": "^0.2.1",
+    "bulma": "^0.2.3",
     "font-awesome": "^4.6.3",
-    "hapi": "^15.1.1",
+    "hapi": "^15.2.0",
     "inert": "^4.0.2",
-    "mongoose": "^4.6.3",
+    "mongoose": "^4.6.4",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
@@ -31,7 +31,7 @@
     "file-loader": "^0.9.0",
     "gulp-util": "^3.0.7",
     "node-sass": "^3.10.1",
-    "npm-check-updates": "^2.8.5",
+    "npm-check-updates": "^2.8.6",
     "redux-devtools": "^3.3.1",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
@@ -41,14 +41,17 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "ncu && npm run dev",
+    "dev": "npm run dev-server && dev-client",
+    "dev-server": "NODE_ENV=development node server.js",
+    "dev-client": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sharp7C0000/team-profile-gen.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/sharp7C0000/team-profile-gen/issues"
   },
